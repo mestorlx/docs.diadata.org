@@ -35,6 +35,35 @@
 <h1>Welcome to Decentralized Information Access’s documentation!<a class="headerlink" href="#welcome-to-decentralized-information-access-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Accurate pricing.</li>
+<li>Best execution.</li>
+<li>No middle men.</li>
+</ul>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>We use docker for easy deployment.
+Install a local version of our stack by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker-compose build
+
+$ docker-compose run
+</pre></div>
+</div>
+</div>
+<div class="section" id="write-your-own-scraper">
+<h2>Write your own Scraper<a class="headerlink" href="#write-your-own-scraper" title="Permalink to this headline">¶</a></h2>
+<p>We use a kafka database for processing all our data.
+Every trade or other data point is stored as an element of the Kafka stream.
+The database holds a collection of filters, that generate meaningful metrics from that raw data,
+for example an average value over the last minute or an index over several currencies.</p>
+<p>In order to add your own scraper for a new data source, you must adhere to our format.
+We use Go modules for our scrapers.
+A scraper must have a function <code class="docutils literal notranslate"><span class="pre">ScrapePair(pair</span> <span class="pre">priceCollection.Pair)</span></code> that can be called from our system.
+It returns a <code class="docutils literal notranslate"><span class="pre">PairScraper</span></code>.</p>
+</div>
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
