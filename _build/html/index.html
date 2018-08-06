@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Welcome to Decentralized Information Access’s documentation! &#8212; Decentralized Information Access  documentation</title>
+    <title>Welcome to the DIA documentation! &#8212; Decentralized Information Access  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -15,6 +15,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Introduction to the DIA technical architecture" href="intro.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -31,8 +32,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-decentralized-information-access-s-documentation">
-<h1>Welcome to Decentralized Information Access’s documentation!<a class="headerlink" href="#welcome-to-decentralized-information-access-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="welcome-to-the-dia-documentation">
+<h1>Welcome to the DIA documentation!<a class="headerlink" href="#welcome-to-the-dia-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <div class="section" id="features">
@@ -52,17 +53,6 @@ Install a local version of our stack by running:</p>
 $ docker-compose run
 </pre></div>
 </div>
-</div>
-<div class="section" id="write-your-own-scraper">
-<h2>Write your own Scraper<a class="headerlink" href="#write-your-own-scraper" title="Permalink to this headline">¶</a></h2>
-<p>We use a kafka database for processing all our data.
-Every trade or other data point is stored as an element of the Kafka stream.
-The database holds a collection of filters, that generate meaningful metrics from that raw data,
-for example an average value over the last minute or an index over several currencies.</p>
-<p>In order to add your own scraper for a new data source, you must adhere to our format.
-We use Go modules for our scrapers.
-A scraper must have a function <code class="docutils literal notranslate"><span class="pre">ScrapePair(pair</span> <span class="pre">priceCollection.Pair)</span></code> that can be called from our system.
-It returns a <code class="docutils literal notranslate"><span class="pre">PairScraper</span></code>.</p>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -91,11 +81,18 @@ It returns a <code class="docutils literal notranslate"><span class="pre">PairSc
 
 
 <h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction to the DIA technical architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup your development environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scraper.html">3. Write your own Scraper</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="intro.html" title="next chapter">1. Introduction to the DIA technical architecture</a></li>
   </ul></li>
 </ul>
 </div>

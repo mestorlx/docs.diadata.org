@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,15 +6,16 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Index &#8212; Decentralized Information Access  documentation</title>
+    <title>3. Write your own Scraper &#8212; Decentralized Information Access  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="index" title="Index" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="2. Setup your development environment" href="setup.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -32,11 +32,21 @@
 
           <div class="body" role="main">
             
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- 
+  <div class="section" id="write-your-own-scraper">
+<h1>3. Write your own Scraper<a class="headerlink" href="#write-your-own-scraper" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="add-your-own-scraper">
+<h2>3.1. Add your own scraper<a class="headerlink" href="#add-your-own-scraper" title="Permalink to this headline">¶</a></h2>
+<p>In order to add your own scraper for a new data source, you must adhere to our format.
+We use Go modules for our scrapers.
+A scraper must have a function <code class="docutils literal notranslate"><span class="pre">ScrapePair(pair</span> <span class="pre">priceCollection.Pair)</span></code> that can be called from our system.
+It returns a <code class="docutils literal notranslate"><span class="pre">PairScraper</span></code>.
+A simple example looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">func</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span><span class="n">BitfinexScraper</span><span class="p">)</span> <span class="n">ScrapePair</span><span class="p">(</span><span class="n">pair</span> <span class="n">priceCollection</span><span class="o">.</span><span class="n">Pair</span><span class="p">)</span> <span class="p">(</span><span class="n">PairScraper</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">scraper</span> <span class="n">code</span> <span class="n">here</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -57,16 +67,17 @@
 
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction to the DIA technical architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup your development environment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="scraper.html">3. Write your own Scraper</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Write your own Scraper</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="setup.html" title="previous chapter">2. Setup your development environment</a></li>
   </ul></li>
 </ul>
 </div>
@@ -93,6 +104,9 @@
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
+      |
+      <a href="_sources/scraper.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
 
     
