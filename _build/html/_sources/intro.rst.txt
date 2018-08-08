@@ -1,3 +1,5 @@
+..  _intro:
+
 Introduction to the DIA technical architecture
 ==============================================
 

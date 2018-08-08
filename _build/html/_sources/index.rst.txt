@@ -17,8 +17,16 @@ Welcome to the DIA documentation!
   setup.rst
   scraper.rst
 
+Structure of this document
+--------------------------
+This document contains the documentation for DIA.
+After a brief `Introduction to the DIA technical architecture`_ into the architecture of the system you can take a deep dive into
+both our `central database` that maintains an overview over financial data and
+into our `system of oracles and other blockchain components`.
 Features
 --------
+
+.. note:: This is a admonition of type `note`.
 
 - Accurate pricing.
 - Best execution.
@@ -39,5 +47,4 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
