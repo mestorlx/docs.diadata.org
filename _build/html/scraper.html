@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>3. Write your own Scraper &#8212; DIA  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -19,17 +27,15 @@
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head><body>
+  </head>
+  <body>
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <div class="section" id="write-your-own-scraper">
@@ -38,104 +44,75 @@
 <h2>3.1. Add your own scraper<a class="headerlink" href="#add-your-own-scraper" title="Permalink to this headline">¶</a></h2>
 <p>In order to add your own scraper for a new data source, you must adhere to our format.
 We use Go modules for our scrapers, so that each data provider is living as an independent module.
-A scraper for cryptocurrencies must have a function <code class="docutils literal notranslate"><span class="pre">ScrapePair(pair</span> <span class="pre">priceCollection.Pair)</span></code> that can be called from our system.
-It returns a <code class="docutils literal notranslate"><span class="pre">PairScraper</span></code>.</p>
+A scraper for cryptocurrencies must have a function <code class="docutils literal"><span class="pre">ScrapePair(pair</span> <span class="pre">dia.Pair)</span></code> that can be called from our system.
+It returns a <code class="docutils literal"><span class="pre">PairScraper</span></code>.</p>
 <p>Let’s assume you want to scrape a data source that provides trade information.
-Create a new file in <code class="docutils literal notranslate"><span class="pre">scrapers/</span></code> and call it <code class="docutils literal notranslate"><span class="pre">MyScraper.go</span></code>.
+Create a new file in <code class="docutils literal"><span class="pre">exchange-scrapers/</span></code> and call it <code class="docutils literal"><span class="pre">MySourceScraper.go</span></code>.
 At first, its content looks like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">func</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span><span class="n">MyScraper</span><span class="p">)</span> <span class="n">ScrapePair</span><span class="p">(</span><span class="n">pair</span> <span class="n">priceCollection</span><span class="o">.</span><span class="n">Pair</span><span class="p">)</span> <span class="p">(</span><span class="n">PairScraper</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">func</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span><span class="n">MyScraper</span><span class="p">)</span> <span class="n">ScrapePair</span><span class="p">(</span><span class="n">pair</span> <span class="n">dia</span><span class="o">.</span><span class="n">Pair</span><span class="p">)</span> <span class="p">(</span><span class="n">PairScraper</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
   <span class="o">//</span> <span class="n">scraper</span> <span class="n">code</span> <span class="n">here</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">PairScraper</span></code> interface is defined as a collection of methods.
+<p>The <code class="docutils literal"><span class="pre">PairScraper</span></code> interface is defined as a collection of methods.
 The most important one is returning a channel which is filled with every trade the scraper witnesses:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">PairScraper</span> <span class="n">receives</span> <span class="n">trades</span> <span class="k">for</span> <span class="n">a</span> <span class="n">single</span> <span class="n">pc</span><span class="o">.</span><span class="n">Pair</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">single</span> <span class="n">exchange</span><span class="o">.</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">PairScraper</span> <span class="n">receives</span> <span class="n">trades</span> <span class="k">for</span> <span class="n">a</span> <span class="n">single</span> <span class="n">pc</span><span class="o">.</span><span class="n">Pair</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">single</span> <span class="n">exchange</span><span class="o">.</span>
 <span class="nb">type</span> <span class="n">PairScraper</span> <span class="n">interface</span> <span class="p">{</span>
   <span class="n">io</span><span class="o">.</span><span class="n">Closer</span>
 
   <span class="o">//</span> <span class="n">Channel</span> <span class="n">returns</span> <span class="n">a</span> <span class="n">channel</span> <span class="n">that</span> <span class="n">can</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">receive</span> <span class="n">trades</span>
-  <span class="n">Channel</span><span class="p">()</span> <span class="n">chan</span> <span class="o">*</span><span class="n">priceCollection</span><span class="o">.</span><span class="n">Trade</span>
+  <span class="n">Channel</span><span class="p">()</span> <span class="n">chan</span> <span class="o">*</span><span class="n">dia</span><span class="o">.</span><span class="n">Trade</span>
 
   <span class="o">//</span> <span class="n">Error</span> <span class="n">returns</span> <span class="n">an</span> <span class="n">error</span> <span class="n">when</span> <span class="n">the</span> <span class="n">channel</span> <span class="n">Channel</span><span class="p">()</span> <span class="ow">is</span> <span class="n">closed</span>
   <span class="o">//</span> <span class="ow">and</span> <span class="n">nil</span> <span class="n">otherwise</span>
   <span class="n">Error</span><span class="p">()</span> <span class="n">error</span>
 
   <span class="o">//</span> <span class="n">Pair</span> <span class="n">returns</span> <span class="n">the</span> <span class="n">pair</span> <span class="n">this</span> <span class="n">scraper</span> <span class="ow">is</span> <span class="n">subscribed</span> <span class="n">to</span>
-  <span class="n">Pair</span><span class="p">()</span> <span class="n">priceCollection</span><span class="o">.</span><span class="n">Pair</span>
+  <span class="n">Pair</span><span class="p">()</span> <span class="n">dia</span><span class="o">.</span><span class="n">Pair</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>The other methods are mainly for Error handling, maintenance and shutdown.
 Our system is running the data scraper on our premises as an example.
 Of course, it is also possible to host your own data provider but in this simple example we assume that MyScraper is hosted on DIA servers.</p>
-<p>For running the scraper, you have to create a go module located in the <code class="docutils literal notranslate"><span class="pre">cmd/</span></code> directory.
-According to our naming convention, it will be called <code class="docutils literal notranslate"><span class="pre">myScraperConnector</span></code> and consist of a directory with that name containing a file also named like this and ending in <code class="docutils literal notranslate"><span class="pre">.go</span></code>.
-Its content at first is organized like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>package main
-
-import (
-  &quot;github.com/diadata-org/TODO/scrapers&quot;
-  &quot;github.com/segmentio/kafka-go&quot;
-  &quot;github.com/tkanos/gonfig&quot;
-  &quot;log&quot;
-  &quot;os&quot;
-  &quot;sync&quot;
-)
-
-// handleTrades delegates trade information to Kafka
-func handleTrades(ps scrapers.PairScraper, wg *sync.WaitGroup, w *kafka.Writer) {
-  for {
-    t, ok := &lt;-ps.Channel()
-
-    if !ok {
-      // log error and return
-      if ps.Error() != nil {
-        log.Printf(&quot;Error: %s\n&quot;, ps.Error())
-      } else {
-        log.Printf(&quot;PairScraper for %s was shut down by user&quot;, ps.Pair())
-      }
-      wg.Done()
-      return
-    }
-    priceCollection.WriteMessage(w, t)
-  }
-}
+<p>For testing your scraper, you should create a config file for your api inside the <code class="docutils literal"><span class="pre">config/secrets</span></code> directory.</p>
+<p>Its name must be MySource.json and its format should be:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;ApiKey&quot;</span><span class="p">:</span> <span class="s2">&quot;xx&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;SecretKey&quot;</span><span class="p">:</span> <span class="s2">&quot;yy&quot;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
+<p>Add a reference to your scraper in the switch:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">switch</span> <span class="n">e</span> <span class="p">:</span><span class="o">=</span> <span class="n">configPair</span><span class="o">.</span><span class="n">Exchange</span><span class="p">;</span> <span class="n">e</span> <span class="p">{</span>
+    <span class="n">case</span> <span class="n">dia</span><span class="o">.</span><span class="n">MySourceExchange</span><span class="p">:</span>
+      <span class="n">s</span><span class="p">[</span><span class="n">configPair</span><span class="o">.</span><span class="n">Exchange</span><span class="p">]</span> <span class="o">=</span> <span class="n">scrapers</span><span class="o">.</span><span class="n">NewMySourceScraper</span><span class="p">(</span><span class="n">configApi</span><span class="o">.</span><span class="n">ApiKey</span><span class="p">,</span> <span class="n">configApi</span><span class="o">.</span><span class="n">SecretKey</span><span class="p">)</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>scraper.go will try to create a scraper for each exchange and collect the data pairs present in <code class="docutils literal"><span class="pre">config/exchange-scrapers.json</span></code></p>
 <p>This is the basic structure of these files.
-Build your go package by calling:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">go</span> <span class="n">install</span>
+Run the scrapping binary by calling:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">go</span> <span class="n">run</span> <span class="n">scraper</span><span class="o">.</span><span class="n">go</span>
 </pre></div>
 </div>
-<p>from the directory the <code class="docutils literal notranslate"><span class="pre">myScraperConnector</span></code> is located in.</p>
+<p>from the <code class="docutils literal"><span class="pre">cmd</span></code> directory.</p>
 </div>
 </div>
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">DIA</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction to the DIA technical architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup your development environment</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Write your own Scraper</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. Write your own Scraper</a><ul>
+<li><a class="reference internal" href="#add-your-own-scraper">3.1. Add your own scraper</a></li>
 </ul>
-
+</li>
+</ul>
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
@@ -144,16 +121,21 @@ Build your go package by calling:</p>
   </ul></li>
 </ul>
 </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/scraper.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -164,8 +146,8 @@ Build your go package by calling:</p>
       &copy;2018, DIA Association.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="_sources/scraper.rst.txt"
