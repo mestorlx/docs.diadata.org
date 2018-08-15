@@ -15,7 +15,8 @@ Welcome to the DIA documentation!
 
   intro.rst
   setup.rst
-  scraper.rst
+  exchange-scrapers.rst
+  blockchain-scrapers.rst
 
 Structure of this document
 --------------------------

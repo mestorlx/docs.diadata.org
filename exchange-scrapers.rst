@@ -1,5 +1,5 @@
-Write your own Scraper
-======================
+Write your own exchange scraper
+===============================
 
 
 Add your own scraper
