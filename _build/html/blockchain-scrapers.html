@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,15 +6,16 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Index &#8212; DIA  documentation</title>
+    <title>4. Write your own blockchain scraper &#8212; DIA  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="index" title="Index" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="3. Write your own exchange scraper" href="exchange-scrapers.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -32,11 +32,23 @@
 
           <div class="body" role="main">
             
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- 
+  <div class="section" id="write-your-own-blockchain-scraper">
+<h1>4. Write your own blockchain scraper<a class="headerlink" href="#write-your-own-blockchain-scraper" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="add-your-own-blockchain-scraper">
+<h2>4.1. Add your own blockchain scraper<a class="headerlink" href="#add-your-own-blockchain-scraper" title="Permalink to this headline">¶</a></h2>
+<p>In order to add your own scraper for a blockchain supply source, you must adhere to our format.
+We use Go modules for our scrapers, so that each data provider is living as an independent module.</p>
+<p>You must provide a Dockerfile for your blockchain client.
+Add an entry into the docker-compose file so that your Dockerfile is automatically called.</p>
+<p>A Go code sample similar to the bitcoin example in the <code class="docutils literal notranslate"><span class="pre">cmd</span></code> folder should be supplied.
+For sending supply data to DIA, you can use <code class="docutils literal notranslate"><span class="pre">SendSupply</span></code> in the <code class="docutils literal notranslate"><span class="pre">ApiClient.go</span></code> file.</p>
+<p>This is the basic structure of these files.
+Run your Docker instance by calling:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">instance</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>from the main directory.</p>
+</div>
 </div>
 
 
@@ -57,17 +69,18 @@
 
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction to the DIA technical architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup your development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exchange-scrapers.html">3. Write your own exchange scraper</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blockchain-scrapers.html">4. Write your own blockchain scraper</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Write your own blockchain scraper</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="exchange-scrapers.html" title="previous chapter">3. Write your own exchange scraper</a></li>
   </ul></li>
 </ul>
 </div>
@@ -94,6 +107,9 @@
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
+      |
+      <a href="_sources/blockchain-scrapers.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
 
     
