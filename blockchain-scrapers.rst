@@ -7,10 +7,68 @@ Add your own blockchain scraper
 In order to add your own scraper for a blockchain supply source, you must adhere to our format.
 We use Go modules for our scrapers, so that each data provider is living as an independent module.
 
-You must provide a Dockerfile for your blockchain client.
-Add an entry into the docker-compose file so that your Dockerfile is automatically called.
+The working directory for blockchain scrapers is ``api-golang/blockchain-scrapers/``.
+You must provide a Dockerfile for your blockchain client and for the Go wrapper that connects to our database.
+An example dockerfile is provided for the Go bindings with a bitcoind client scraping the Bitcoin blockchain::
 
-A Go code sample similar to the bitcoin example in the ``cmd`` folder should be supplied.
+   FROM golang:latest as build
+   WORKDIR $GOPATH/src/
+   COPY . .
+   WORKDIR $GOPATH/src/github.com/diadata-org/api-golang/blockchain-scrapers/cmd
+   RUN go install
+   FROM gcr.io/distroless/base
+   COPY --from=build /go/bin/cmd /bin/blockchain-scrapers
+   CMD ["blockchain-scrapers"]
+
+After cloning a container capable of executing Go, the files from the working directory are copied into the container.
+Next, the go program located in ``api-golang/blockchain-scrapers/cmd`` is built and installed and the finished binary is placed into a mininal distroless container.
+From there it is executed using the statement in the last line.
+
+The bitcoind itself is initialized directly from the file ``docker-compose.yml``.
+Ideally, all blockchain clients are run from there directly::
+
+   bitcoind:
+      image:
+         kylemanna/bitcoind
+      ports:
+         - "8332"
+      volumes:
+         - /home/srv/bitcoind:/bitcoin
+      command: btc_oneshot -prune=550 -rpcallowip=::/0 -disablewallet -rpcpassword=mysecretrpcdiapassword -rpcuser=mysecretrpcdiauser
+      logging:
+         options:
+            max-size: "50m"
+      networks:
+         - scrapers-network
+      deploy:
+         mode: global
+         placement:
+            constraints:
+               - node.labels.bitcoind==true
+         restart_policy:
+            delay: 2s
+            window: 20s
+
+For your Go code, also add an entry into the docker-compose file so that your Dockerfile is automatically called.
+An example entry should look something like this::
+
+   btc: 
+      build:
+         context: ../../../..
+         dockerfile: github.com/diadata-org/api-golang/blockchain-scrapers/Dockerfile-btc
+      image: blockchain-scrapers_btc 
+      networks:
+         - scrapers-network
+      logging:
+         options:
+            max-size: "50m"
+      secrets:
+         - api_diadata
+
+To initialize the API from go you can call::
+   
+   api = dia.NewClient(&c)
+
 For sending supply data to DIA, you can use ``SendSupply`` in the ``ApiClient.go`` file.
 
 This is the basic structure of these files.

@@ -38,10 +38,68 @@
 <h2>4.1. Add your own blockchain scraper<a class="headerlink" href="#add-your-own-blockchain-scraper" title="Permalink to this headline">¶</a></h2>
 <p>In order to add your own scraper for a blockchain supply source, you must adhere to our format.
 We use Go modules for our scrapers, so that each data provider is living as an independent module.</p>
-<p>You must provide a Dockerfile for your blockchain client.
-Add an entry into the docker-compose file so that your Dockerfile is automatically called.</p>
-<p>A Go code sample similar to the bitcoin example in the <code class="docutils literal notranslate"><span class="pre">cmd</span></code> folder should be supplied.
-For sending supply data to DIA, you can use <code class="docutils literal notranslate"><span class="pre">SendSupply</span></code> in the <code class="docutils literal notranslate"><span class="pre">ApiClient.go</span></code> file.</p>
+<p>The working directory for blockchain scrapers is <code class="docutils literal notranslate"><span class="pre">api-golang/blockchain-scrapers/</span></code>.
+You must provide a Dockerfile for your blockchain client and for the Go wrapper that connects to our database.
+An example dockerfile is provided for the Go bindings with a bitcoind client scraping the Bitcoin blockchain:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FROM golang:latest as build
+WORKDIR $GOPATH/src/
+COPY . .
+WORKDIR $GOPATH/src/github.com/diadata-org/api-golang/blockchain-scrapers/cmd
+RUN go install
+FROM gcr.io/distroless/base
+COPY --from=build /go/bin/cmd /bin/blockchain-scrapers
+CMD [&quot;blockchain-scrapers&quot;]
+</pre></div>
+</div>
+<p>After cloning a container capable of executing Go, the files from the working directory are copied into the container.
+Next, the go program located in <code class="docutils literal notranslate"><span class="pre">api-golang/blockchain-scrapers/cmd</span></code> is built and installed and the finished binary is placed into a mininal distroless container.
+From there it is executed using the statement in the last line.</p>
+<p>The bitcoind itself is initialized directly from the file <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code>.
+Ideally, all blockchain clients are run from there directly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bitcoind</span><span class="p">:</span>
+   <span class="n">image</span><span class="p">:</span>
+      <span class="n">kylemanna</span><span class="o">/</span><span class="n">bitcoind</span>
+   <span class="n">ports</span><span class="p">:</span>
+      <span class="o">-</span> <span class="s2">&quot;8332&quot;</span>
+   <span class="n">volumes</span><span class="p">:</span>
+      <span class="o">-</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">srv</span><span class="o">/</span><span class="n">bitcoind</span><span class="p">:</span><span class="o">/</span><span class="n">bitcoin</span>
+   <span class="n">command</span><span class="p">:</span> <span class="n">btc_oneshot</span> <span class="o">-</span><span class="n">prune</span><span class="o">=</span><span class="mi">550</span> <span class="o">-</span><span class="n">rpcallowip</span><span class="o">=</span><span class="p">::</span><span class="o">/</span><span class="mi">0</span> <span class="o">-</span><span class="n">disablewallet</span> <span class="o">-</span><span class="n">rpcpassword</span><span class="o">=</span><span class="n">mysecretrpcdiapassword</span> <span class="o">-</span><span class="n">rpcuser</span><span class="o">=</span><span class="n">mysecretrpcdiauser</span>
+   <span class="n">logging</span><span class="p">:</span>
+      <span class="n">options</span><span class="p">:</span>
+         <span class="nb">max</span><span class="o">-</span><span class="n">size</span><span class="p">:</span> <span class="s2">&quot;50m&quot;</span>
+   <span class="n">networks</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">scrapers</span><span class="o">-</span><span class="n">network</span>
+   <span class="n">deploy</span><span class="p">:</span>
+      <span class="n">mode</span><span class="p">:</span> <span class="k">global</span>
+      <span class="n">placement</span><span class="p">:</span>
+         <span class="n">constraints</span><span class="p">:</span>
+            <span class="o">-</span> <span class="n">node</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">bitcoind</span><span class="o">==</span><span class="n">true</span>
+      <span class="n">restart_policy</span><span class="p">:</span>
+         <span class="n">delay</span><span class="p">:</span> <span class="mi">2</span><span class="n">s</span>
+         <span class="n">window</span><span class="p">:</span> <span class="mi">20</span><span class="n">s</span>
+</pre></div>
+</div>
+<p>For your Go code, also add an entry into the docker-compose file so that your Dockerfile is automatically called.
+An example entry should look something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">btc</span><span class="p">:</span>
+   <span class="n">build</span><span class="p">:</span>
+      <span class="n">context</span><span class="p">:</span> <span class="o">../../../..</span>
+      <span class="n">dockerfile</span><span class="p">:</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">diadata</span><span class="o">-</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">-</span><span class="n">golang</span><span class="o">/</span><span class="n">blockchain</span><span class="o">-</span><span class="n">scrapers</span><span class="o">/</span><span class="n">Dockerfile</span><span class="o">-</span><span class="n">btc</span>
+   <span class="n">image</span><span class="p">:</span> <span class="n">blockchain</span><span class="o">-</span><span class="n">scrapers_btc</span>
+   <span class="n">networks</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">scrapers</span><span class="o">-</span><span class="n">network</span>
+   <span class="n">logging</span><span class="p">:</span>
+      <span class="n">options</span><span class="p">:</span>
+         <span class="nb">max</span><span class="o">-</span><span class="n">size</span><span class="p">:</span> <span class="s2">&quot;50m&quot;</span>
+   <span class="n">secrets</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">api_diadata</span>
+</pre></div>
+</div>
+<p>To initialize the API from go you can call:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">api</span> <span class="o">=</span> <span class="n">dia</span><span class="o">.</span><span class="n">NewClient</span><span class="p">(</span><span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For sending supply data to DIA, you can use <code class="docutils literal notranslate"><span class="pre">SendSupply</span></code> in the <code class="docutils literal notranslate"><span class="pre">ApiClient.go</span></code> file.</p>
 <p>This is the basic structure of these files.
 Run your Docker instance by calling:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">instance</span><span class="o">&gt;</span>
