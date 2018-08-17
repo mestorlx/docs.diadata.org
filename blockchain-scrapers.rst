@@ -55,6 +55,8 @@ Ideally, all blockchain clients are run from there directly::
             delay: 2s
             window: 20s
 
+Make sure to enable pruning so that only the latest mined blocks are stored in the container.
+
 Go Wrapper
 ----------
 
