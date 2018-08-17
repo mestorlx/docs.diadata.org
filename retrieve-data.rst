@@ -17,7 +17,7 @@ This results in the exchange price between EUR and the latest currency that was 
 
    {"Result":{"offset":92,"messages":[[{"Symbol":"EURTHB","Value":37.822,"Name":"EURTHB","Time":"2018-08-16T00:00:00Z","Source":{"Name":"ECB"}}]]}}
 
-The data format lisst the currency pair, the value of the other currency in EUR, its name, the time it was scraped by our database and a description of the original data source.
+The data format list the currency pair, the value of the other currency in EUR, its name, the time it was scraped by our database and a description of the original data source.
 If you want to retrieve other currencies look at the ``offset`` value in the reply and ask the API::
 
    https://api.diadata.org/v1/ecb?offset=91
