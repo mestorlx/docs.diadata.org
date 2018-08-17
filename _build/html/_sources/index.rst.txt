@@ -7,16 +7,16 @@ Welcome to the DIA documentation!
 =================================
 
 .. toctree::
-  :maxdepth: 2
+  :maxdepth: 3
   :numbered:
   :titlesonly:
-  :hidden:
   :caption: Contents:
 
   intro.rst
   setup.rst
   exchange-scrapers.rst
   blockchain-scrapers.rst
+  retrieve-data.rst
 
 Structure of this document
 --------------------------
@@ -24,6 +24,7 @@ This document contains the documentation for DIA.
 After a brief `Introduction to the DIA technical architecture` into the architecture of the system you can take a deep dive into.
 both our `central database` that maintains an overview over financial data and
 into our `system of oracles and other blockchain components`.
+Finally, you can learn how to retrieve data from our system.
 
 Features
 --------
