@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>4. Write your own blockchain scraper &#8212; DIA  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -15,21 +15,24 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="3. Write your own exchange scraper" href="exchange-scrapers.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="prev" title="3. Write your own exchange scraper" href="exchange-scrapers.html" /> 
   </head><body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="exchange-scrapers.html" title="3. Write your own exchange scraper"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DIA  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <div class="section" id="write-your-own-blockchain-scraper">
@@ -38,6 +41,9 @@
 <h2>4.1. Add your own blockchain scraper<a class="headerlink" href="#add-your-own-blockchain-scraper" title="Permalink to this headline">¶</a></h2>
 <p>In order to add your own scraper for a blockchain supply source, you must adhere to our format.
 We use Go modules for our scrapers, so that each data provider is living as an independent module.</p>
+</div>
+<div class="section" id="directory-structure">
+<h2>4.2. Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h2>
 <p>The working directory for blockchain scrapers is <code class="docutils literal notranslate"><span class="pre">api-golang/blockchain-scrapers/</span></code>.
 You must provide a Dockerfile for your blockchain client and for the Go wrapper that connects to our database.
 An example dockerfile is provided for the Go bindings with a bitcoind client scraping the Bitcoin blockchain:</p>
@@ -54,6 +60,9 @@ CMD [&quot;blockchain-scrapers&quot;]
 <p>After cloning a container capable of executing Go, the files from the working directory are copied into the container.
 Next, the go program located in <code class="docutils literal notranslate"><span class="pre">api-golang/blockchain-scrapers/cmd</span></code> is built and installed and the finished binary is placed into a mininal distroless container.
 From there it is executed using the statement in the last line.</p>
+</div>
+<div class="section" id="blockchain-client">
+<h2>4.3. Blockchain Client<a class="headerlink" href="#blockchain-client" title="Permalink to this headline">¶</a></h2>
 <p>The bitcoind itself is initialized directly from the file <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code>.
 Ideally, all blockchain clients are run from there directly:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bitcoind</span><span class="p">:</span>
@@ -79,6 +88,9 @@ Ideally, all blockchain clients are run from there directly:</p>
          <span class="n">window</span><span class="p">:</span> <span class="mi">20</span><span class="n">s</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="go-wrapper">
+<h2>4.4. Go Wrapper<a class="headerlink" href="#go-wrapper" title="Permalink to this headline">¶</a></h2>
 <p>For your Go code, also add an entry into the docker-compose file so that your Dockerfile is automatically called.
 An example entry should look something like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">btc</span><span class="p">:</span>
@@ -95,8 +107,26 @@ An example entry should look something like this:</p>
       <span class="o">-</span> <span class="n">api_diadata</span>
 </pre></div>
 </div>
-<p>To initialize the API from go you can call:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">api</span> <span class="o">=</span> <span class="n">dia</span><span class="o">.</span><span class="n">NewClient</span><span class="p">(</span><span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+<p>Be sure to add your container to the <code class="docutils literal notranslate"><span class="pre">scrapers-network</span></code> virtual network.
+Your credentials for the DIA API should be handled by the <code class="docutils literal notranslate"><span class="pre">secrets</span></code> directive in the section of your blockchain client.
+To initialize the API from Go you can create:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="n">api</span> <span class="o">*</span><span class="n">dia</span><span class="o">.</span><span class="n">Client</span>
+</pre></div>
+</div>
+<p>and then call:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="n">c</span> <span class="n">dia</span><span class="o">.</span><span class="n">ConfigApi</span>
+<span class="n">configFile</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;/run/secrets/api_diadata&quot;</span>
+<span class="n">err</span> <span class="p">:</span><span class="o">=</span> <span class="n">gonfig</span><span class="o">.</span><span class="n">GetConf</span><span class="p">(</span><span class="n">configFile</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="n">nil</span> <span class="p">{</span>
+   <span class="n">configFile</span> <span class="o">=</span> <span class="s2">&quot;../config/secrets/api_diadata.json&quot;</span>
+   <span class="n">err</span> <span class="o">=</span> <span class="n">gonfig</span><span class="o">.</span><span class="n">GetConf</span><span class="p">(</span><span class="n">configFile</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="n">nil</span> <span class="p">{</span>
+   <span class="n">log</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+   <span class="n">log</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;Loaded secret in&quot;</span><span class="p">,</span> <span class="n">configFile</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">dia</span><span class="o">.</span><span class="n">NewClient</span><span class="p">(</span><span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For sending supply data to DIA, you can use <code class="docutils literal notranslate"><span class="pre">SendSupply</span></code> in the <code class="docutils literal notranslate"><span class="pre">ApiClient.go</span></code> file.</p>
@@ -111,37 +141,31 @@ Run your Docker instance by calling:</p>
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">DIA</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction to the DIA technical architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup your development environment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exchange-scrapers.html">3. Write your own exchange scraper</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Write your own blockchain scraper</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. Write your own blockchain scraper</a><ul>
+<li><a class="reference internal" href="#add-your-own-blockchain-scraper">4.1. Add your own blockchain scraper</a></li>
+<li><a class="reference internal" href="#directory-structure">4.2. Directory structure</a></li>
+<li><a class="reference internal" href="#blockchain-client">4.3. Blockchain Client</a></li>
+<li><a class="reference internal" href="#go-wrapper">4.4. Go Wrapper</a></li>
+</ul>
+</li>
 </ul>
 
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="exchange-scrapers.html" title="previous chapter">3. Write your own exchange scraper</a></li>
-  </ul></li>
-</ul>
-</div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="exchange-scrapers.html"
+                        title="previous chapter">3. Write your own exchange scraper</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/blockchain-scrapers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -158,20 +182,21 @@ Run your Docker instance by calling:</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2018, DIA Association.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
-      
-      |
-      <a href="_sources/blockchain-scrapers.rst.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="exchange-scrapers.html" title="3. Write your own exchange scraper"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DIA  documentation</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, DIA Association.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+    </div>
   </body>
 </html>

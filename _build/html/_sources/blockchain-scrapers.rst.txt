@@ -7,6 +7,9 @@ Add your own blockchain scraper
 In order to add your own scraper for a blockchain supply source, you must adhere to our format.
 We use Go modules for our scrapers, so that each data provider is living as an independent module.
 
+Directory structure
+-------------------
+
 The working directory for blockchain scrapers is ``api-golang/blockchain-scrapers/``.
 You must provide a Dockerfile for your blockchain client and for the Go wrapper that connects to our database.
 An example dockerfile is provided for the Go bindings with a bitcoind client scraping the Bitcoin blockchain::
@@ -23,6 +26,9 @@ An example dockerfile is provided for the Go bindings with a bitcoind client scr
 After cloning a container capable of executing Go, the files from the working directory are copied into the container.
 Next, the go program located in ``api-golang/blockchain-scrapers/cmd`` is built and installed and the finished binary is placed into a mininal distroless container.
 From there it is executed using the statement in the last line.
+
+Blockchain Client
+-----------------
 
 The bitcoind itself is initialized directly from the file ``docker-compose.yml``.
 Ideally, all blockchain clients are run from there directly::
@@ -49,6 +55,9 @@ Ideally, all blockchain clients are run from there directly::
             delay: 2s
             window: 20s
 
+Go Wrapper
+----------
+
 For your Go code, also add an entry into the docker-compose file so that your Dockerfile is automatically called.
 An example entry should look something like this::
 
@@ -65,8 +74,26 @@ An example entry should look something like this::
       secrets:
          - api_diadata
 
-To initialize the API from go you can call::
-   
+Be sure to add your container to the ``scrapers-network`` virtual network.
+Your credentials for the DIA API should be handled by the ``secrets`` directive in the section of your blockchain client.
+To initialize the API from Go you can create::
+
+   var api *dia.Client
+
+and then call::
+
+   var c dia.ConfigApi
+   configFile := "/run/secrets/api_diadata"
+   err := gonfig.GetConf(configFile, &c)
+   if err != nil {
+      configFile = "../config/secrets/api_diadata.json"
+      err = gonfig.GetConf(configFile, &c)
+   }
+   if err != nil {
+      log.Println(err)
+   } else {
+      log.Println("Loaded secret in", configFile)
+   }
    api = dia.NewClient(&c)
 
 For sending supply data to DIA, you can use ``SendSupply`` in the ``ApiClient.go`` file.
