@@ -56,6 +56,7 @@ Ideally, all blockchain clients are run from there directly::
             window: 20s
 
 Make sure to enable pruning so that only the latest mined blocks are stored in the container.
+Add persistency in /home/srv for the daemon data, so it can restart without needing to resynch the blockchain.
 
 Go Wrapper
 ----------

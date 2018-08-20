@@ -36,13 +36,11 @@ Features
 Installation
 ------------
 
-We use docker for easy deployment.
-Install a local version of our stack by running::
+Clone our repository into your GOPATH to begin::
 
-    $ docker-compose build
+   git clone git@github.com:diadata-org/api-golang
 
-    $ docker-compose run
-
+More information on how to scrape data can be found in the respective pages.
 
 Indices and tables
 ==================
