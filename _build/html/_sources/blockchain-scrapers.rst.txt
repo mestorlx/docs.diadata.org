@@ -107,3 +107,4 @@ Run your Docker instance by calling::
    docker run <your instance>
 
 from the main directory.
+With ``docker-compose up`` you can test the entire system with your cryptocurrency VM and your Go wrapper in a virtual network.
