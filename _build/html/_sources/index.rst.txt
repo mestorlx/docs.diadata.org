@@ -26,12 +26,12 @@ both our `central database` that maintains an overview over financial data and
 into our `system of oracles and other blockchain components`.
 Finally, you can learn how to retrieve data from our system.
 
-Features
---------
+DIA overview
+------------
 
-- Accurate pricing.
-- Best execution.
-- No middle men.
+The DIA community is a growing global crypto community that cares about open reliable data for financial applications.
+Everyone can contribute and participate.
+More information about our project can be found on our `main page <https://diadata.org/>`_.
 
 Installation
 ------------
