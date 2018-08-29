@@ -1,0 +1,60 @@
+@font-face {
+	font-family: 'Dia';
+	src: url('../fonts/MaisonNeue/MaisonNeue-Book.ttf');
+	/*font-weight: 600;*/
+}
+
+body {
+	font-family: Dia!important;
+}
+
+h1, h2, h3, h4, p, a, .btn, button, .rst-content div[class^='highlight'] pre, input[type="text"] {
+	font-family: Dia, sans-serif;
+}
+
+.wy-nav-content-wrap {
+	background: unset;
+}
+
+@media (max-width: 1600px) {
+	.wy-nav-content {
+		margin: auto;
+	}
+}
+
+.wy-side-nav-search {
+	background-color: #000!important;
+}
+.wy-menu-vertical li.current>a {
+	background: #007bff!important;
+	color: #fff;
+}
+.wy-menu-vertical li.toctree-l1.current>a {
+	border-bottom: solid 1px #007bff;
+	border-top: solid 1px #007bff;
+}
+
+footer p {
+	color: #000;
+}
+
+.wy-nav-top {
+	background-color: #000!important;
+}
+
+.wy-nav-side {
+	background: #000;
+}
+
+.wy-side-nav-search input[type=text] {
+	border-color: unset;
+}
+
+a {
+	color: #007bff;
+}
+
+.wy-menu-vertical a:hover {
+	background: #007bff;
+}
+

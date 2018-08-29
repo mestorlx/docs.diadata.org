@@ -1,167 +1,304 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>3. Write your own exchange scraper &#8212; DIA  documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="4. Write your own blockchain scraper" href="blockchain-scrapers.html" />
-    <link rel="prev" title="2. Setup your development environment" href="setup.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="blockchain-scrapers.html" title="4. Write your own blockchain scraper"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="setup.html" title="2. Setup your development environment"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DIA  documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+	<title>3. Write your own exchange scraper &mdash; DIA documentation</title>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="write-your-own-exchange-scraper">
-<h1>3. Write your own exchange scraper<a class="headerlink" href="#write-your-own-exchange-scraper" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="add-your-own-scraper">
-<h2>3.1. Add your own scraper<a class="headerlink" href="#add-your-own-scraper" title="Permalink to this headline">¶</a></h2>
-<p>In order to add your own scraper for a new data source, you must adhere to our format.
-We use Go modules for our scrapers, so that each data provider is living as an independent module.
-A scraper for cryptocurrencies must have a function <code class="docutils literal notranslate"><span class="pre">ScrapePair(pair</span> <span class="pre">dia.Pair)</span></code> that can be called from our system.
-It returns a <code class="docutils literal notranslate"><span class="pre">PairScraper</span></code>.</p>
-<p>Let’s assume you want to scrape a data source that provides trade information.
-Create a new file in <code class="docutils literal notranslate"><span class="pre">exchange-scrapers/</span></code> and call it <code class="docutils literal notranslate"><span class="pre">MySourceScraper.go</span></code>.
-At first, its content looks like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">func</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span><span class="n">MyScraper</span><span class="p">)</span> <span class="n">ScrapePair</span><span class="p">(</span><span class="n">pair</span> <span class="n">dia</span><span class="o">.</span><span class="n">Pair</span><span class="p">)</span> <span class="p">(</span><span class="n">PairScraper</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+
+	<link rel="stylesheet" href="_static/css/theme.css" type="text/css"/>
+	<link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
+	<link rel="stylesheet" href="_static/css/dia.css" type="text/css" />
+	<link rel="index" title="Index" href="genindex.html"/>
+	<link rel="search" title="Search" href="search.html"/>
+	<link rel="next" title="4. Write your own blockchain scraper" href="blockchain-scrapers.html"/>
+	<link rel="prev" title="2. Setup your development environment" href="setup.html"/>
+
+
+	<script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+	<nav data-toggle="wy-nav-shift" class="wy-nav-side">
+		<div class="wy-side-scroll">
+			<div class="wy-side-nav-search">
+
+
+				<a href="index.html" class="icon icon-home"> DIA
+
+
+				</a>
+
+
+				<div role="search">
+					<form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+						<input type="text" name="q" placeholder="Search docs"/>
+						<input type="hidden" name="check_keywords" value="yes"/>
+						<input type="hidden" name="area" value="default"/>
+					</form>
+				</div>
+
+
+			</div>
+
+			<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+				<p class="caption"><span class="caption-text">Contents:</span></p>
+				<ul class="current">
+					<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction to the DIA technical
+						architecture</a></li>
+					<li class="toctree-l1"><a class="reference internal" href="setup.html">2. Setup your development
+						environment</a></li>
+					<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Write your own exchange
+						scraper</a></li>
+					<li class="toctree-l1"><a class="reference internal" href="blockchain-scrapers.html">4. Write your own
+						blockchain scraper</a></li>
+					<li class="toctree-l1"><a class="reference internal" href="retrieve-data.html">5. Retrieve Data from DIA for
+						your DApp</a></li>
+				</ul>
+
+
+			</div>
+		</div>
+	</nav>
+
+	<section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+		<nav class="wy-nav-top" aria-label="top navigation">
+
+			<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+			<a href="index.html">DIA</a>
+
+		</nav>
+
+
+		<div class="wy-nav-content">
+
+			<div class="rst-content">
+
+
+				<div role="navigation" aria-label="breadcrumbs navigation">
+
+					<ul class="wy-breadcrumbs">
+
+						<li><a href="index.html">Docs</a> &raquo;</li>
+
+						<li>3. Write your own exchange scraper</li>
+
+
+						<li class="wy-breadcrumbs-aside">
+
+
+							<a href="_sources/exchange-scrapers.rst.txt" rel="nofollow"> View page source</a>
+
+
+						</li>
+
+					</ul>
+
+
+					<hr/>
+				</div>
+				<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+					<div itemprop="articleBody">
+
+						<div class="section" id="write-your-own-exchange-scraper">
+							<h1>3. Write your own exchange scraper<a class="headerlink" href="#write-your-own-exchange-scraper"
+							                                         title="Permalink to this headline">¶</a></h1>
+							<div class="section" id="add-your-own-scraper">
+								<h2>3.1. Add your own scraper<a class="headerlink" href="#add-your-own-scraper"
+								                                title="Permalink to this headline">¶</a></h2>
+								<p>In order to add your own scraper for a new data source, you must adhere to our format.
+									We use Go modules for our scrapers, so that each data provider is living as an independent module.
+									A scraper for cryptocurrencies must have a function <code class="docutils literal notranslate"><span
+													class="pre">ScrapePair(pair</span> <span class="pre">dia.Pair)</span></code> that can be
+									called from our system.
+									It returns a <code class="docutils literal notranslate"><span class="pre">PairScraper</span></code>.
+								</p>
+								<p>Let’s assume you want to scrape a data source that provides trade information.
+									Create a new file in <code class="docutils literal notranslate"><span
+													class="pre">exchange-scrapers/</span></code> and call it <code
+													class="docutils literal notranslate"><span class="pre">MySourceScraper.go</span></code>.
+									At first, its content looks like this:</p>
+								<div class="highlight-default notranslate">
+									<div class="highlight"><pre><span></span><span class="n">func</span> <span class="p">(</span><span
+													class="n">s</span> <span class="o">*</span><span class="n">MyScraper</span><span
+													class="p">)</span> <span class="n">ScrapePair</span><span class="p">(</span><span class="n">pair</span> <span
+													class="n">dia</span><span class="o">.</span><span class="n">Pair</span><span
+													class="p">)</span> <span class="p">(</span><span class="n">PairScraper</span><span
+													class="p">,</span> <span class="n">error</span><span class="p">)</span> <span
+													class="p">{</span>
   <span class="o">//</span> <span class="n">scraper</span> <span class="n">code</span> <span class="n">here</span>
 <span class="p">}</span>
-</pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">PairScraper</span></code> interface is defined as a collection of methods.
-The most important one is returning a channel which is filled with every trade the scraper witnesses:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">PairScraper</span> <span class="n">receives</span> <span class="n">trades</span> <span class="k">for</span> <span class="n">a</span> <span class="n">single</span> <span class="n">pc</span><span class="o">.</span><span class="n">Pair</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">single</span> <span class="n">exchange</span><span class="o">.</span>
-<span class="nb">type</span> <span class="n">PairScraper</span> <span class="n">interface</span> <span class="p">{</span>
+</pre>
+									</div>
+								</div>
+								<p>The <code class="docutils literal notranslate"><span class="pre">PairScraper</span></code> interface
+									is defined as a collection of methods.
+									The most important one is returning a channel which is filled with every trade the scraper witnesses:
+								</p>
+								<div class="highlight-default notranslate">
+									<div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">PairScraper</span> <span
+													class="n">receives</span> <span class="n">trades</span> <span class="k">for</span> <span
+													class="n">a</span> <span class="n">single</span> <span class="n">pc</span><span
+													class="o">.</span><span class="n">Pair</span> <span class="kn">from</span> <span
+													class="nn">a</span> <span class="n">single</span> <span class="n">exchange</span><span
+													class="o">.</span>
+<span class="nb">type</span> <span class="n">PairScraper</span> <span class="n">interface</span> <span
+														class="p">{</span>
   <span class="n">io</span><span class="o">.</span><span class="n">Closer</span>
 
-  <span class="o">//</span> <span class="n">Channel</span> <span class="n">returns</span> <span class="n">a</span> <span class="n">channel</span> <span class="n">that</span> <span class="n">can</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">receive</span> <span class="n">trades</span>
-  <span class="n">Channel</span><span class="p">()</span> <span class="n">chan</span> <span class="o">*</span><span class="n">dia</span><span class="o">.</span><span class="n">Trade</span>
+  <span class="o">//</span> <span class="n">Channel</span> <span class="n">returns</span> <span class="n">a</span> <span
+														class="n">channel</span> <span class="n">that</span> <span class="n">can</span> <span
+														class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">receive</span> <span
+														class="n">trades</span>
+  <span class="n">Channel</span><span class="p">()</span> <span class="n">chan</span> <span class="o">*</span><span
+														class="n">dia</span><span class="o">.</span><span class="n">Trade</span>
 
-  <span class="o">//</span> <span class="n">Error</span> <span class="n">returns</span> <span class="n">an</span> <span class="n">error</span> <span class="n">when</span> <span class="n">the</span> <span class="n">channel</span> <span class="n">Channel</span><span class="p">()</span> <span class="ow">is</span> <span class="n">closed</span>
+  <span class="o">//</span> <span class="n">Error</span> <span class="n">returns</span> <span class="n">an</span> <span
+														class="n">error</span> <span class="n">when</span> <span class="n">the</span> <span
+														class="n">channel</span> <span class="n">Channel</span><span class="p">()</span> <span
+														class="ow">is</span> <span class="n">closed</span>
   <span class="o">//</span> <span class="ow">and</span> <span class="n">nil</span> <span class="n">otherwise</span>
   <span class="n">Error</span><span class="p">()</span> <span class="n">error</span>
 
-  <span class="o">//</span> <span class="n">Pair</span> <span class="n">returns</span> <span class="n">the</span> <span class="n">pair</span> <span class="n">this</span> <span class="n">scraper</span> <span class="ow">is</span> <span class="n">subscribed</span> <span class="n">to</span>
-  <span class="n">Pair</span><span class="p">()</span> <span class="n">dia</span><span class="o">.</span><span class="n">Pair</span>
+  <span class="o">//</span> <span class="n">Pair</span> <span class="n">returns</span> <span class="n">the</span> <span
+														class="n">pair</span> <span class="n">this</span> <span class="n">scraper</span> <span
+														class="ow">is</span> <span class="n">subscribed</span> <span class="n">to</span>
+  <span class="n">Pair</span><span class="p">()</span> <span class="n">dia</span><span class="o">.</span><span
+														class="n">Pair</span>
 <span class="p">}</span>
-</pre></div>
-</div>
-<p>The other methods are mainly for Error handling, maintenance and shutdown.
-Our system is running the data scraper on our premises as an example.
-Of course, it is also possible to host your own data provider but in this simple example we assume that MyScraper is hosted on DIA servers.</p>
-<p>For testing your scraper, you should create a config file for your api inside the <code class="docutils literal notranslate"><span class="pre">config/secrets</span></code> directory.</p>
-<p>Its name must be MySource.json and its format should be:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="s2">&quot;ApiKey&quot;</span><span class="p">:</span> <span class="s2">&quot;xx&quot;</span><span class="p">,</span>
+</pre>
+									</div>
+								</div>
+								<p>The other methods are mainly for Error handling, maintenance and shutdown.
+									Our system is running the data scraper on our premises as an example.
+									Of course, it is also possible to host your own data provider but in this simple example we assume
+									that MyScraper is hosted on DIA servers.</p>
+								<p>For testing your scraper, you should create a config file for your api inside the <code
+												class="docutils literal notranslate"><span class="pre">config/secrets</span></code> directory.
+								</p>
+								<p>Its name must be MySource.json and its format should be:</p>
+								<div class="highlight-default notranslate">
+									<div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;ApiKey&quot;</span><span class="p">:</span> <span class="s2">&quot;xx&quot;</span><span
+														class="p">,</span>
   <span class="s2">&quot;SecretKey&quot;</span><span class="p">:</span> <span class="s2">&quot;yy&quot;</span>
 <span class="p">}</span>
-</pre></div>
-</div>
-<p>Add a reference to your scraper in the switch:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">switch</span> <span class="n">e</span> <span class="p">:</span><span class="o">=</span> <span class="n">configPair</span><span class="o">.</span><span class="n">Exchange</span><span class="p">;</span> <span class="n">e</span> <span class="p">{</span>
-    <span class="n">case</span> <span class="n">dia</span><span class="o">.</span><span class="n">MySourceExchange</span><span class="p">:</span>
-      <span class="n">s</span><span class="p">[</span><span class="n">configPair</span><span class="o">.</span><span class="n">Exchange</span><span class="p">]</span> <span class="o">=</span> <span class="n">scrapers</span><span class="o">.</span><span class="n">NewMySourceScraper</span><span class="p">(</span><span class="n">configApi</span><span class="o">.</span><span class="n">ApiKey</span><span class="p">,</span> <span class="n">configApi</span><span class="o">.</span><span class="n">SecretKey</span><span class="p">)</span>
+</pre>
+									</div>
+								</div>
+								<p>Add a reference to your scraper in the switch:</p>
+								<div class="highlight-default notranslate">
+									<div class="highlight"><pre><span></span><span class="n">switch</span> <span class="n">e</span> <span
+													class="p">:</span><span class="o">=</span> <span class="n">configPair</span><span
+													class="o">.</span><span class="n">Exchange</span><span class="p">;</span> <span
+													class="n">e</span> <span class="p">{</span>
+    <span class="n">case</span> <span class="n">dia</span><span class="o">.</span><span
+														class="n">MySourceExchange</span><span class="p">:</span>
+      <span class="n">s</span><span class="p">[</span><span class="n">configPair</span><span class="o">.</span><span
+														class="n">Exchange</span><span class="p">]</span> <span class="o">=</span> <span class="n">scrapers</span><span
+														class="o">.</span><span class="n">NewMySourceScraper</span><span class="p">(</span><span
+														class="n">configApi</span><span class="o">.</span><span class="n">ApiKey</span><span
+														class="p">,</span> <span class="n">configApi</span><span class="o">.</span><span class="n">SecretKey</span><span
+														class="p">)</span>
     <span class="p">}</span>
-</pre></div>
-</div>
-<p>scraper.go will try to create a scraper for each exchange and collect the data pairs present in <code class="docutils literal notranslate"><span class="pre">config/exchange-scrapers.json</span></code></p>
-<p>This is the basic structure of these files.
-Run the scrapping binary by calling:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">go</span> <span class="n">run</span> <span class="n">scraper</span><span class="o">.</span><span class="n">go</span>
-</pre></div>
-</div>
-<p>from the <code class="docutils literal notranslate"><span class="pre">cmd</span></code> directory.</p>
-</div>
+</pre>
+									</div>
+								</div>
+								<p>scraper.go will try to create a scraper for each exchange and collect the data pairs present in <code
+												class="docutils literal notranslate"><span
+												class="pre">config/exchange-scrapers.json</span></code></p>
+								<p>This is the basic structure of these files.
+									Run the scrapping binary by calling:</p>
+								<div class="highlight-default notranslate">
+									<div class="highlight"><pre><span></span><span class="n">go</span> <span class="n">run</span> <span
+													class="n">scraper</span><span class="o">.</span><span class="n">go</span>
+</pre>
+									</div>
+								</div>
+								<p>from the <code class="docutils literal notranslate"><span class="pre">cmd</span></code> directory.
+								</p>
+							</div>
+						</div>
+
+
+					</div>
+
+				</div>
+				<footer>
+
+					<div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+
+						<a href="blockchain-scrapers.html" class="btn btn-neutral float-right"
+						   title="4. Write your own blockchain scraper" accesskey="n" rel="next">Next <span
+										class="fa fa-arrow-circle-right"></span></a>
+
+
+						<a href="setup.html" class="btn btn-neutral" title="2. Setup your development environment" accesskey="p"
+						   rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+					</div>
+
+
+					<hr/>
+
+					<div role="contentinfo">
+						<p>
+							&copy; Copyright 2018, DIA Association.
+
+						</p>
+					</div>
+					Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+								href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read
+					the Docs</a>.
+
+				</footer>
+
+			</div>
+		</div>
+
+	</section>
+
 </div>
 
 
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">3. Write your own exchange scraper</a><ul>
-<li><a class="reference internal" href="#add-your-own-scraper">3.1. Add your own scraper</a></li>
-</ul>
-</li>
-</ul>
+<script type="text/javascript">
+	var DOCUMENTATION_OPTIONS = {
+		URL_ROOT: './',
+		VERSION: '',
+		LANGUAGE: 'None',
+		COLLAPSE_INDEX: false,
+		FILE_SUFFIX: '.html',
+		HAS_SOURCE: true,
+		SOURCELINK_SUFFIX: '.txt'
+	};
+</script>
+<script type="text/javascript" src="_static/jquery.js"></script>
+<script type="text/javascript" src="_static/underscore.js"></script>
+<script type="text/javascript" src="_static/doctools.js"></script>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="setup.html"
-                        title="previous chapter">2. Setup your development environment</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="blockchain-scrapers.html"
-                        title="next chapter">4. Write your own blockchain scraper</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/exchange-scrapers.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="blockchain-scrapers.html" title="4. Write your own blockchain scraper"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="setup.html" title="2. Setup your development environment"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DIA  documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, DIA Association.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
-    </div>
-  </body>
+
+<script type="text/javascript" src="_static/js/theme.js"></script>
+
+<script type="text/javascript">
+	jQuery(function () {
+		SphinxRtdTheme.Navigation.enable(true);
+	});
+</script>
+
+</body>
 </html>
