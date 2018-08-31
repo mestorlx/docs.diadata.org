@@ -82,16 +82,16 @@ html_theme_path = ["."]
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#
-html_theme_options = {"bgcolor": '#ffffff',
-        "sidebarbgcolor": '#ffffff',
+
+#html_theme_options = {"bgcolor": '#ffffff',
+        #"sidebarbgcolor": '#ffffff',
         #"sidebarbgcolor": '#7972F9',
-        "sidebartextcolor": '#000000',
-        "sidebarlinkcolor": '#111111',
-        "headbgcolor": '#ffffff',
-        "footerbgcolor": '#000000',
-        "relbarbgcolor": '#000000'
-        }
+        #"sidebartextcolor": '#000000',
+        #"sidebarlinkcolor": '#111111',
+        #"headbgcolor": '#ffffff',
+        #"footerbgcolor": '#000000',
+        #"relbarbgcolor": '#000000'
+        #}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -168,4 +168,4 @@ texinfo_documents = [
 
 
 def setup(app):
-   app.add_stylesheet('dia.css')  # give a filename you created.
+   app.add_stylesheet('css/dia.css')  # give a filename you created.
