@@ -34,7 +34,7 @@ The most important one is returning a channel which is filled with every trade t
     // Pair returns the pair this scraper is subscribed to
     Pair() dia.Pair
   }
- 
+
 The other methods are mainly for Error handling, maintenance and shutdown.
 Our system is running the data scraper on our premises as an example.
 Of course, it is also possible to host your own data provider but in this simple example we assume that MyScraper is hosted on DIA servers.
@@ -60,6 +60,6 @@ scraper.go will try to create a scraper for each exchange and collect the data p
 This is the basic structure of these files.
 Run the scrapping binary by calling::
 
-  go run scraper.go
+  go run scraper.go -exchange desiredExchange
 
-from the ``cmd`` directory.
+from the ``cmd/exchange-scrapers/collectorTextOnly`` directory.
