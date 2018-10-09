@@ -34,7 +34,7 @@ To install and run that default stack, start a local docker swarm by typing::
 
 Then it is time to build the first containers. This might take some while, as the images have to be downloaded and compiled::
 
-  docker-compose build
+  docker-compose -f deployments/docker-compose.desiredconfiguration.yml build
 
 Tag your local machine node in your swarm with labels for kafka and the zookeeper::
 
